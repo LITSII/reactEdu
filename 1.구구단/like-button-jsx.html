@@ -1,37 +1,54 @@
-<html>
+html>
 <head>
+    <title>React 18 Like Button</title>
 </head>
 <body>
 <div id="root"></div>
+
+<!-- React 18 라이브러리 -->
 <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-<!--<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>-->
-<!--<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>-->
-<script type="text/babel">
-  'use strict';
+<!-- Babel 버전을 7로 업데이트 권장 -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  class LikeButton extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {liked: false};
+<script type="text/babel">
+    'use strict';
+
+    class LikeButton extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = { liked: false };
+        }
+
+        render() {
+            // 1. 여기서 리턴하면 아래 버튼은 영원히 볼 수 없습니다. (의도하신 게 맞다면 유지)
+            if (this.state.liked) {
+                return 'You liked this.';
+            }
+
+            // 2. return 바로 뒤에 소괄호 ( 를 붙여야 에러가 안 납니다.
+            return (
+                <button onClick={() => this.setState({ liked: true })}>
+                    {this.state.liked ? 'Liked' : 'Like!'}
+
+                    {/* 3. i를 중괄호로 감싸야 변수로 인식합니다. map 사용시 key값도 넣어주세요. */}
+                    {[1, 2, 3].map((i) => {
+                        return <div key={i}>{i}</div>;
+                    })}
+                </button>
+            );
+        }
     }
 
-    render() {
-      if (this.state.liked) {
-        return 'You liked this.';
-      }
-
-      return (
-        <button onClick={() => this.setState({liked: true})}>
-          Like
-        </button>
-      );
-    }
-  }
-</script>
-<script type="text/babel">
-  ReactDOM.createRoot(document.querySelector('#root')).render(<LikeButton/>);
+    // React 18 방식의 렌더링
+    const root = ReactDOM.createRoot(document.querySelector('#root'));
+    root.render(
+        <div>
+            <LikeButton />
+            <LikeButton />
+            <LikeButton />
+        </div>
+    );
 </script>
 </body>
 </html>
